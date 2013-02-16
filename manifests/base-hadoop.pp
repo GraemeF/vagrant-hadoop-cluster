@@ -11,13 +11,18 @@ package { "openjdk-6-jdk" :
   require => Exec['apt-get update']
 }
 
+file { "/root/.ssh":
+  ensure => "directory",
+  require => Exec['apt-get update']
+}
+
 file {
   "/root/.ssh/id_rsa":
   source => "puppet:///modules/hadoop/id_rsa",
   mode => 600,
   owner => root,
   group => root,
-  require => Exec['apt-get update']
+  require => File['/root/.ssh']
  }
  
 file {
@@ -26,7 +31,7 @@ file {
   mode => 644,
   owner => root,
   group => root,
-  require => Exec['apt-get update']
+  require => File['/root/.ssh']
  }
 
 ssh_authorized_key { "ssh_key":
